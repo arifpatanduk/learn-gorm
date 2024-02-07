@@ -12,13 +12,14 @@ import (
 func main() {
 	database.StartDB()
 
-	// createUser("anjoyo@gmail.com")
+	// createUser("john@gmail.com")
 	// getUserById(1)
 	// updateUserById(1, "anjoy@gmail.com")
 
 	// createProduct(1, "UHT", "ultra milk")
 	// getUsersWithProducts()
-	deleteProductById(1)
+	// deleteProductById(1)
+	getAllUser()
 }
 
 func createUser(email string) {
@@ -36,6 +37,28 @@ func createUser(email string) {
 	}
 
 	fmt.Println("New user data:", User)
+}
+
+func getAllUser() {
+	db := database.GetDB()
+	users := []models.User{}
+
+	err := db.Find(&users).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			fmt.Println("User data not found")
+			return
+		}
+
+		print("Error finding user:", err)
+	}
+
+	fmt.Println("User data:")
+	for _, user := range users {
+		fmt.Printf("%+v \n", user)
+	}
+
 }
 
 func getUserById (id uint) {
